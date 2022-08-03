@@ -1,7 +1,7 @@
 // 支撑轴压比计算
 // lib002
 // created at 2022/08/01 14:39:51
-// last modified at 2022/08/02 11:29:51
+// last modified at 2022/08/03 15:34:45
 // 
 // copyright (c) 2022 Jack Hsu <120522448@qq.com>
 
@@ -11,7 +11,7 @@ var concreteStrut = {
     getAxialStrength: function (strut) {
         // param strut: sample { width: "700", height: "800", concreteLevel: "C30" }
         var s = Number(strut.width) * Number(strut.height);
-        return concreteGB50010.queryFc(strut.concreteLevel) * s * 0.001
+        return concrete.GB50010.queryFc(strut.concreteLevel) * s * 0.001
     },
     getAxialForce: function (site) {
         // param site: sample { pressure: 234, distance: 8.5, angle: 90, steps: 1, loadFactor: 1.35 }
