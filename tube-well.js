@@ -1,13 +1,13 @@
 // 单井出水量
 // lib003
 // created at 2022/08/01 23:50:09
-// last modified at 2022/08/03 15:34:41
+// last modified at 2022/08/03 15:53:56
 // 
 // copyright (c) 2022 Jack Hsu <120522448@qq.com>
 
 
 
-var well = {
+var tubeWell = {
     standards: ["JGJ120"],
     JGJ120: {
         specific: "JGJ120-2012",
