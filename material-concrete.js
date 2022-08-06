@@ -1,13 +1,13 @@
 // 混凝土强度
 // lib001
 // created at 2022/08/01 14:39:51
-// last modified at 2022/08/04 19:17:02
+// last modified at 2022/08/06 15:54:58
 // 
 // copyright (c) 2022 Jack Hsu
 
 
 
-var concrete = {
+const concrete = {
     standards: ["GB50010"],
     GB50010: {
         specific: "GB50010-2010",
