@@ -1,13 +1,13 @@
 // 渗透估算
 // lib005
 // created at 2022/08/02 10:38:23
-// last modified at 2022/08/04 19:17:08
+// last modified at 2022/08/06 13:00:42
 // 
 // copyright (c) 2022 Jack Hsu
 
 
 
-var seepage = {
+const seepage = {
     standards: ["JGJ120"],
     JGJ120: {
         specific: "JGJ120-2012",

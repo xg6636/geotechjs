@@ -1,13 +1,13 @@
 // 单井出水量
 // lib003
 // created at 2022/08/01 23:50:09
-// last modified at 2022/08/04 22:15:09
+// last modified at 2022/08/06 13:00:50
 // 
 // copyright (c) 2022 Jack Hsu
 
 
 
-var tubeWell = {
+const tubeWell = {
     getMaxCapacity: function (a) {
         // param a: sample {filterRadius: 0.3, filterLength: 18, k: 18}
         var out = 120 * Math.PI;
