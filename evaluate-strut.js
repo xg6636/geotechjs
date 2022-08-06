@@ -1,13 +1,13 @@
 // 支撑轴压比计算
 // lib002
 // created at 2022/08/01 14:39:51
-// last modified at 2022/08/06 15:37:20
+// last modified at 2022/08/06 15:41:12
 // 
 // copyright (c) 2022 Jack Hsu
 
 
 
-import { queryFc as queryConcreteFc } from "/material-concrete.js";
+import { queryFc as queryConcreteFc } from "./material-concrete.js";
 
 const concreteStrut = {
     getAxialStrength: function (strut) {
