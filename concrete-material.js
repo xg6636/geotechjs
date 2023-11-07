@@ -7,9 +7,9 @@
 
 
 
-const concrete = {
-    queryFck: function (a) {
-        var fck = {
+const gb_concrete_material = {
+    query_fck: function (a) {
+        let fck = {
             "C15": 10.0,
             "C20": 13.4,
             "C25": 16.7,
@@ -24,11 +24,11 @@ const concrete = {
             "C70": 44.5,
             "C75": 47.4,
             "C80": 50.2
-        }
-        return { specific: "GB50010-2010", value: fck[String(a).toUpperCase()] }
+        };
+        return { specific: "GB50010-2010", value: fck[String(a).toUpperCase()] };
     },
-    queryFc: function (a) {
-        var fc = {
+    query_fc: function (a) {
+        let fc = {
             "C15": 7.2,
             "C20": 9.6,
             "C25": 11.9,
@@ -43,7 +43,7 @@ const concrete = {
             "C70": 31.8,
             "C75": 33.8,
             "C80": 35.9
-        }
-        return { specific: "GB50010-2010", value: fc[String(a).toUpperCase()] }
+        };
+        return { specific: "GB50010-2010", value: fc[String(a).toUpperCase()] };
     }
 }
