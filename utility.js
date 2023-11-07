@@ -1,9 +1,9 @@
 // utilities
 // lib004
 // created at 2022/08/02 10:08:21f
-// last modified at 2023-11-07 22:00:35
+// last modified at 2023-11-07 22:52:04
 // 
-// copyright (c) 2022 Jack Hsu
+// copyright (c) 2022 - 2023 Jack Hsu
 
 
 
