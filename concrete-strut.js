@@ -1,20 +1,20 @@
 // 支撑轴压比计算
 // lib002
 // created at 2022/08/01 14:39:51
-// last modified at 2023-11-07 22:06:25
+// last modified at 2023-11-07 22:53:23
 // 
-// copyright (c) 2022 Jack Hsu
+// copyright (c) 2022 - 2023 Jack Hsu
 
 
 
 const concrete_strut = {
     get_axial_strength: function (strut) {
-        // param strut: sample { width: "700", height: "800", concreteLevel: "C30" }
+        // param strut: sample { width: "700", height: "800", concrete_level: "C30" }
         var s = Number(strut.width) * Number(strut.height);
         return gb_concrete_material.query_fc(strut.concrete_level).value * s * 0.001;
     },
     get_axial_force: function (site) {
-        // param site: sample { pressure: 234, distance: 8.5, angle: 90, steps: 1, loadFactor: 1.35 }
+        // param site: sample { pressure: 234, distance: 8.5, angle: 90, steps: 1, load_factor: 1.35 }
         var f = Number(site.pressure); // 围压
         f *= Number(site.distance); // 支撑间距
         f *= Number(site.load_factor); // 荷载系数
