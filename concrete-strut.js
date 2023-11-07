@@ -1,7 +1,7 @@
 // 支撑轴压比计算
 // lib002
 // created at 2022/08/01 14:39:51
-// last modified at 2022/08/06 16:17:36
+// last modified at 2023-11-07 22:06:25
 // 
 // copyright (c) 2022 Jack Hsu
 
