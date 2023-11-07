@@ -1,7 +1,7 @@
 // 混凝土强度
 // lib001
 // created at 2022/08/01 14:39:51
-// last modified at 2022/08/06 16:15:52
+// last modified at 2023-11-07 22:05:55
 // 
 // copyright (c) 2022 Jack Hsu
 
@@ -47,3 +47,4 @@ const gb_concrete_material = {
         return { specific: "GB50010-2010", value: fc[String(a).toUpperCase()] };
     }
 }
+
