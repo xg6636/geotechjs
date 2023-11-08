@@ -1,14 +1,13 @@
 // 混凝土强度
 // lib001
 // created at 2022/08/01 14:39:51
-// last modified at 2023-11-08 10:00:39
-// 
+// last modified at 2023-11-08 17:33:17
+//
 // copyright (c) 2022 - 2023 Jack Hsu
 
 
-
-const concreteMaterialGB = {
-    queryFck: function (a) {
+const CONCRETE_MATERIAL = {
+    queryFck(a) {
         let fck = {
             "C15": 10.0,
             "C20": 13.4,
@@ -25,9 +24,12 @@ const concreteMaterialGB = {
             "C75": 47.4,
             "C80": 50.2
         };
-        return { specific: "GB50010-2010", value: fck[String(a).toUpperCase()] };
+        return {
+            basis: "GB50010-2010",
+            value: fck[String(a).toUpperCase()]
+        };
     },
-    queryFc: function (a) {
+    queryFc(a) {
         let fc = {
             "C15": 7.2,
             "C20": 9.6,
@@ -44,7 +46,9 @@ const concreteMaterialGB = {
             "C75": 33.8,
             "C80": 35.9
         };
-        return { specific: "GB50010-2010", value: fc[String(a).toUpperCase()] };
+        return {
+            basis: "GB50010-2010",
+            value: fc[String(a).toUpperCase()]
+        };
     }
 }
-
