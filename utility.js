@@ -1,7 +1,7 @@
 // utilities
 // lib004
 // created at 2022/08/02 10:08:21f
-// last modified at 17:07 2023/11/8
+// last modified at 2023-11-08 17:50:49
 // 
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -38,8 +38,8 @@ function getFormData(formId) {
 
 
 function createFormObjectByItemId(formName) {
-    // Caution: out’s property value is string!!!
-    let out = new Object();
+    // Caution: out’s property value is string!
+    let out = {};
     let frm = document.forms[formName];
     for (i = 0; i < frm.length; i++) {
         out[frm[i].id] = frm[i].value;
