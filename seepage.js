@@ -8,7 +8,7 @@
 
 
 const seepage = {
-    norms: ["JGJ120"],
+    specific: ["JGJ120"],
     jgj120: {
         specific: "JGJ120-2012",
         runFormulaC01(a) {
