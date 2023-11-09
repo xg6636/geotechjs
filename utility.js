@@ -1,7 +1,7 @@
 // utilities
-// lib004
+// coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/02 10:08:21f
-// last modified at 2023-11-08 17:50:49
+// last modified at 2023-11-09 11:48:55
 // 
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -33,7 +33,7 @@ function getFormData(formId) {
             }
         }
     }
-    return out;
+    return out
 }
 
 
@@ -44,5 +44,5 @@ function createFormObjectByItemId(formName) {
     for (i = 0; i < frm.length; i++) {
         out[frm[i].id] = frm[i].value;
     }
-    return out;
+    return out
 }
