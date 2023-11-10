@@ -1,9 +1,11 @@
 // smw model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 14:31:37
+// last modified at 2023-11-10 16:09:25
 //
 // copyright (c) 2023 Jack Hsu
+
+
 
 const modelSMW = {
     // require materialSteel,

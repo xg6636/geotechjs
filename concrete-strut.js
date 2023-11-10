@@ -1,9 +1,11 @@
 // 支撑轴压比计算
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 14:39:51
-// last modified at 2023-11-10 14:35:12
+// last modified at 2023-11-10 16:09:51
 //
 // copyright (c) 2022 - 2023 Jack Hsu
+
+
 
 const concreteStrut = {
   getAxialStrength(a) {

@@ -1,9 +1,11 @@
 // jgj/t199-2010 model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 15:35:31
+// last modified at 2023-11-10 16:09:33
 //
 // copyright (c) 2023 Jack Hsu
+
+
 
 const modelJGJT1992010 = {
     // require modelSMW,

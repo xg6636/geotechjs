@@ -1,9 +1,11 @@
 // 钢材强度
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 15:34:07
+// last modified at 2023-11-10 16:09:38
 //
 // copyright (c) 2023 Jack Hsu
+
+
 
 const materialSteel = (function () {
   const _gb500172017Data = {
