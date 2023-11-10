@@ -1,21 +1,19 @@
 // utilities
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/02 10:08:21f
-// last modified at 2023-11-09 11:48:55
-// 
+// last modified at 2023-11-10 14:37:07
+//
 // copyright (c) 2022 - 2023 Jack Hsu
-
-
 
 function getFormData(formId) {
     let f = document.getElementById(formId);
     let out = {};
     let e;
     for (let i = 0; i < f.length; i++) {
-        if (f[i].name != '' && f[i].disabled == false) {
+        if (f[i].name != "" && f[i].disabled == false) {
             e = f[i].name.replaceAll("-", "_");
             switch (f[i].type.toLowerCase()) {
-                case 'checkbox':
+                case "checkbox":
                     if (out[e] == undefined) {
                         out[e] = [];
                     }
@@ -23,7 +21,7 @@ function getFormData(formId) {
                         out[e].push(f[i].value);
                     }
                     break;
-                case 'radio':
+                case "radio":
                     if (f[i].checked) {
                         out[e] = f[i].value;
                     }
@@ -33,9 +31,8 @@ function getFormData(formId) {
             }
         }
     }
-    return out
+    return out;
 }
-
 
 function createFormObjectByItemId(formName) {
     // Caution: out’s property value is string!
@@ -44,5 +41,5 @@ function createFormObjectByItemId(formName) {
     for (i = 0; i < frm.length; i++) {
         out[frm[i].id] = frm[i].value;
     }
-    return out
+    return out;
 }

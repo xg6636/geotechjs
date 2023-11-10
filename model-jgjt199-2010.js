@@ -1,11 +1,9 @@
 // jgj/t199-2010 model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-09 14:01:49
+// last modified at 2023-11-10 14:33:55
 //
 // copyright (c) 2023 Jack Hsu
-
-
 
 const modelJGJT1992010 = {
     // require modelSMW,
@@ -15,8 +13,8 @@ const modelJGJT1992010 = {
         gamma0: {
             level1: 1.1,
             level2: 1.0,
-            level3: 0.9
-        }
+            level3: 0.9,
+        },
     },
 
     preprocessPitData(pitData) {
@@ -36,7 +34,7 @@ const modelJGJT1992010 = {
         } else {
             ret.gamma0 = pitData.gamma0;
         }
-        return ret
+        return ret;
     },
 
     formula4241: {
@@ -46,16 +44,16 @@ const modelJGJT1992010 = {
             ret.w = shapedSteelData.wx;
             ret.f = shapedSteelData.f;
 
-            let x = ret.gammaf * ret.gamma0 * ret.mk / ret.w * 1000;
+            let x = ((ret.gammaf * ret.gamma0 * ret.mk) / ret.w) * 1000;
             ret.result = x.toFixed(3);
 
             if (x <= ret.f) {
-                ret.quality = 1
+                ret.quality = 1;
             } else {
-                ret.quality = 0
+                ret.quality = 0;
             }
 
-            return ret
+            return ret;
         },
 
         resultToHTML(r) {
@@ -65,16 +63,16 @@ const modelJGJT1992010 = {
                 \\frac{ ${r.gammaf} \\gamma_0M_k}{W_x}
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.mk} \\div ${r.w} \\times 1000 \\\\
                 &= ${r.result} N/mm^2
-                ${(r.quality == 1) ?
-                    `\\leq f = ${r.f} N/mm^2 \\end{align} \\] 型钢抗弯强度<b>满足要求</b >。`
-                    :
-                    `\\gt f = ${r.f} N/mm^2 \\end{align} \\] 型钢抗弯强度<span class='red-bold'>不满足要求</span>。`}`;
-            return a
+                ${r.quality == 1
+                    ? `\\leq f = ${r.f} N/mm^2 \\end{align} \\] 型钢抗弯强度<b>满足要求</b >。`
+                    : `\\gt f = ${r.f} N/mm^2 \\end{align} \\] 型钢抗弯强度<span class='red-bold'>不满足要求</span>。`
+                }`;
+            return a;
         },
 
         runAndOutputHTML(pitData, shapedSteelData) {
-            return this.resultToHTML(this.run(pitData, shapedSteelData))
-        }
+            return this.resultToHTML(this.run(pitData, shapedSteelData));
+        },
     },
 
     formula4242: {
@@ -86,7 +84,8 @@ const modelJGJT1992010 = {
             ret.tw = shapedSteelData.tw;
             ret.fv = shapedSteelData.fv;
 
-            let x = ret.gammaf * ret.gamma0 * ret.vk * ret.s / ret.i / ret.tw * 1000;
+            let x =
+                ((ret.gammaf * ret.gamma0 * ret.vk * ret.s) / ret.i / ret.tw) * 1000;
             ret.result = x.toFixed(3);
 
             if (x <= ret.fv) {
@@ -95,7 +94,7 @@ const modelJGJT1992010 = {
                 ret.quality = 0;
             }
 
-            return ret
+            return ret;
         },
 
         resultToHTML(r) {
@@ -106,16 +105,16 @@ const modelJGJT1992010 = {
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.vk} \\times ${r.s} 
                 \\div ${r.i} \\div ${r.tw} \\times 1000 \\\\
                 &= ${r.result} N/mm^2
-                ${(r.quality == 1) ?
-                    `\\leq f_v= ${r.fv} N/mm^2 \\end{align} \\] 型钢抗剪强度<b>满足要求</b>。`
-                    :
-                    `\\gt f_v= ${r.fv} N/mm^2 \\end{align} \\] 型钢抗剪强度<span class='red-bold'>不满足要求</span>。`}`;
-            return a
+                ${r.quality == 1
+                    ? `\\leq f_v= ${r.fv} N/mm^2 \\end{align} \\] 型钢抗剪强度<b>满足要求</b>。`
+                    : `\\gt f_v= ${r.fv} N/mm^2 \\end{align} \\] 型钢抗剪强度<span class='red-bold'>不满足要求</span>。`
+                }`;
+            return a;
         },
 
         runAndOutputHTML(pitData, shapedSteelData) {
-            return this.resultToHTML(this.run(pitData, shapedSteelData))
-        }
+            return this.resultToHTML(this.run(pitData, shapedSteelData));
+        },
     },
 
     formula4251: {
@@ -138,7 +137,7 @@ const modelJGJT1992010 = {
             }
 
             ret.de1 = h - (h - shapedSteelData.h) * 0.5;
-            x = ret.gammaf * ret.gamma0 * ret.v1k / ret.de1;
+            x = (ret.gammaf * ret.gamma0 * ret.v1k) / ret.de1;
             ret.tau1 = x.toFixed(3);
             ret.result = ret.tau1;
 
@@ -148,7 +147,7 @@ const modelJGJT1992010 = {
                 ret.quality = 0;
             }
 
-            return ret
+            return ret;
         },
 
         resultToHTML(r) {
@@ -171,17 +170,17 @@ const modelJGJT1992010 = {
                 \\tau_1 &=\\frac{ ${r.gammaf} \\gamma_0V_{1k}}{d_{e1}} \\\\
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.v1k} \\div ${r.de1} \\\\
                 &= ${r.tau1} N/mm^2
-                ${(r.quality == 1) ?
-                    `\\leq \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<b>满足要求</b>。`
-                    :
-                    `\\gt \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`}
+                ${r.quality == 1
+                    ? `\\leq \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<b>满足要求</b>。`
+                    : `\\gt \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`
+                }
                 </p>`;
-            return a
+            return a;
         },
 
         runAndOutputHTML(pitData, shapedSteelData, dsmData) {
-            return this.resultToHTML(this.run(pitData, shapedSteelData, dsmData))
-        }
+            return this.resultToHTML(this.run(pitData, shapedSteelData, dsmData));
+        },
     },
 
     formula4255: {
@@ -210,7 +209,7 @@ const modelJGJT1992010 = {
                 }
 
                 ret.v2k = ret.qk * ret.l2 * 0.5;
-                x = ret.gammaf * ret.gamma0 * ret.v2k / ret.de2;
+                x = (ret.gammaf * ret.gamma0 * ret.v2k) / ret.de2;
                 ret.tau2 = x.toFixed(3);
                 ret.result = ret.tau2;
 
@@ -220,15 +219,14 @@ const modelJGJT1992010 = {
                     ret.quality = 0;
                 }
             }
-            return ret
+            return ret;
         },
 
         resultToHTML(r) {
             let a;
-            a = `${(r.quality == -1) ?
-                `<p>H型钢为密插型，无需验算水泥土最薄弱截面局部受剪承载力。</p>`
-                :
-                `<p>
+            a = `${r.quality == -1
+                ? `<p>H型钢为密插型，无需验算水泥土最薄弱截面局部受剪承载力。</p>`
+                : `<p>
                 根据JGJ/T199-2010公式4.2.5-4，
                 \\[ \\tau=\\frac{\\tau_{ck}}{1.6}
                 = ${r.tauck} \\div 1.6
@@ -246,17 +244,17 @@ const modelJGJT1992010 = {
                 \\tau_2 &=\\frac{ ${r.gammaf} \\gamma_0V_{2k}}{d_{e2}} \\\\
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.v2k} \\div ${r.de2} \\\\
                 &= ${r.tau2} N/mm^2
-                ${(r.quality == 1) ?
-                    `\\leq \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<b>满足要求</b>。`
-                    :
-                    `\\gt \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`}
+                ${r.quality == 1
+                    ? `\\leq \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<b>满足要求</b>。`
+                    : `\\gt \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`
+                }
                 </p>`
                 }`;
-            return a
+            return a;
         },
 
         runAndOutputHTML(pitData, shapedSteelData, dsmData) {
-            return this.resultToHTML(this.run(pitData, shapedSteelData, dsmData))
-        }
-    }
+            return this.resultToHTML(this.run(pitData, shapedSteelData, dsmData));
+        },
+    },
 };
