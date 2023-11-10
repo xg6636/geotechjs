@@ -1,7 +1,7 @@
 // jgj/t199-2010 model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 14:33:55
+// last modified at 2023-11-10 15:35:31
 //
 // copyright (c) 2023 Jack Hsu
 
@@ -19,21 +19,9 @@ const modelJGJT1992010 = {
 
     preprocessPitData(pitData) {
         let ret = { pitLevel: pitData.level.toLowerCase() };
-        if (Array.isArray(pitData.norms)) {
-            ret.norms = pitData.norms;
-        }
-
-        if (pitData.gammaf == undefined) {
-            ret.gammaf = this.constant.gammaf;
-        } else {
-            ret.gammaf = pitData.gammaf;
-        }
-
-        if (pitData.gamma0 == undefined) {
-            ret.gamma0 = this.constant.gamma0[ret.pitLevel];
-        } else {
-            ret.gamma0 = pitData.gamma0;
-        }
+        ret.norms = Array.isArray(pitData.norms) ? pitData.norms : undefined;
+        ret.gammaf = pitData.gammaf == undefined ? this.constant.gammaf : pitData.gammaf;
+        ret.gamma0 = pitData.gamma0 == undefined ? this.constant.gamma0[ret.pitLevel] : pitData.gamma0;
         return ret;
     },
 
@@ -46,19 +34,13 @@ const modelJGJT1992010 = {
 
             let x = ((ret.gammaf * ret.gamma0 * ret.mk) / ret.w) * 1000;
             ret.result = x.toFixed(3);
-
-            if (x <= ret.f) {
-                ret.quality = 1;
-            } else {
-                ret.quality = 0;
-            }
+            ret.quality = x <= ret.f ? 1 : 0;
 
             return ret;
         },
 
         resultToHTML(r) {
-            let a;
-            a = `根据JGJ/T199-2010公式4.2.4-1，
+            let a = `根据JGJ/T199-2010公式4.2.4-1，
                 \\[ \\begin{align}
                 \\frac{ ${r.gammaf} \\gamma_0M_k}{W_x}
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.mk} \\div ${r.w} \\times 1000 \\\\
@@ -84,22 +66,15 @@ const modelJGJT1992010 = {
             ret.tw = shapedSteelData.tw;
             ret.fv = shapedSteelData.fv;
 
-            let x =
-                ((ret.gammaf * ret.gamma0 * ret.vk * ret.s) / ret.i / ret.tw) * 1000;
+            let x = ((ret.gammaf * ret.gamma0 * ret.vk * ret.s) / ret.i / ret.tw) * 1000;
             ret.result = x.toFixed(3);
-
-            if (x <= ret.fv) {
-                ret.quality = 1;
-            } else {
-                ret.quality = 0;
-            }
+            ret.quality = x <= ret.fv ? 1 : 0;
 
             return ret;
         },
 
         resultToHTML(r) {
-            let a;
-            a = `根据JGJ/T199-2010公式4.2.4-2，
+            let a = `根据JGJ/T199-2010公式4.2.4-2，
                 \\[ \\begin{align}
                 \\frac{ ${r.gammaf} \\gamma_0V_kS}{It_w}
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.vk} \\times ${r.s} 
@@ -129,23 +104,13 @@ const modelJGJT1992010 = {
             ret.tau = x.toFixed(3);
             ret.v1k = ret.qk * ret.l1 * 0.5;
 
-            let h;
-            if (dsmData.kind == "round") {
-                h = dsmData.diameter;
-            } else {
-                h = dsmData.thickness;
-            }
+            let h = dsmData.kind == "round" ? dsmData.diameter : dsmData.thickness;
 
             ret.de1 = h - (h - shapedSteelData.h) * 0.5;
             x = (ret.gammaf * ret.gamma0 * ret.v1k) / ret.de1;
             ret.tau1 = x.toFixed(3);
             ret.result = ret.tau1;
-
-            if (ret.tau1 <= ret.tau) {
-                ret.quality = 1;
-            } else {
-                ret.quality = 0;
-            }
+            ret.quality = ret.tau1 <= ret.tau ? 1 : 0;
 
             return ret;
         },
@@ -212,12 +177,7 @@ const modelJGJT1992010 = {
                 x = (ret.gammaf * ret.gamma0 * ret.v2k) / ret.de2;
                 ret.tau2 = x.toFixed(3);
                 ret.result = ret.tau2;
-
-                if (ret.tau2 <= ret.tau) {
-                    ret.quality = 1;
-                } else {
-                    ret.quality = 0;
-                }
+                ret.quality = ret.tau2 <= ret.tau ? 1 : 0;
             }
             return ret;
         },

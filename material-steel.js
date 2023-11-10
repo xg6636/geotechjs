@@ -1,7 +1,7 @@
 // 钢材强度
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 14:44:16
+// last modified at 2023-11-10 15:34:07
 //
 // copyright (c) 2023 Jack Hsu
 
@@ -39,7 +39,8 @@ const materialSteel = (function () {
   };
 
   let _lookup = function (guidelineData, kind, th) {
-    const v = guidelineData[kind.toLowerCase()];
+    kind = kind.toLowerCase();
+    const v = guidelineData[kind];
     if (v == undefined) {
       return undefined;
     } else {
@@ -51,7 +52,7 @@ const materialSteel = (function () {
       } else {
         let out = _outJSON(v[`t${c[0]}`]);
         out.basis = guidelineData.name;
-        out.name = kind.toLowerCase();
+        out.name = kind;
         return out;
       }
     }

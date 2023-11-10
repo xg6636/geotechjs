@@ -1,7 +1,7 @@
 // utilities
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/02 10:08:21f
-// last modified at 2023-11-10 14:37:07
+// last modified at 2023-11-10 15:28:05
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -9,10 +9,12 @@ function getFormData(formId) {
     let f = document.getElementById(formId);
     let out = {};
     let e;
+    let et;
     for (let i = 0; i < f.length; i++) {
         if (f[i].name != "" && f[i].disabled == false) {
             e = f[i].name.replaceAll("-", "_");
-            switch (f[i].type.toLowerCase()) {
+            et = f[i].type.toLowerCase();
+            switch (et) {
                 case "checkbox":
                     if (out[e] == undefined) {
                         out[e] = [];

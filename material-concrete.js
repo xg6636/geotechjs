@@ -1,7 +1,7 @@
 // 混凝土强度
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 14:39:51
-// last modified at 2023-11-10 14:30:08
+// last modified at 2023-11-10 15:30:05
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -43,13 +43,14 @@ const materialConcrete = (function () {
   };
 
   let _byLevelName = function (guidelineData, levelName) {
-    const b = guidelineData[levelName.toUpperCase()];
+    levelName = levelName.toUpperCase();
+    const b = guidelineData[levelName];
     if (b == undefined) {
       return undefined;
     } else {
       return {
         basis: guidelineData.name,
-        name: levelName.toUpperCase(),
+        name: levelName,
         fc: b[0],
         fck: b[1],
       };
