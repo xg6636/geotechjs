@@ -1,14 +1,13 @@
 // 钢材强度
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 14:30:17
+// last modified at 2023-11-10 14:44:16
 //
 // copyright (c) 2023 Jack Hsu
 
 const materialSteel = (function () {
-  // basis: "GB50017-2017",
-
-  let gb500172017Data = {
+  const _gb500172017Data = {
+    name: "GB50017-2017",
     q235: {
       t16: [215, 125, 320, 235, 370],
       t40: [205, 120, 320, 225, 370],
@@ -51,19 +50,19 @@ const materialSteel = (function () {
         return undefined;
       } else {
         let out = _outJSON(v[`t${c[0]}`]);
+        out.basis = guidelineData.name;
         out.name = kind.toLowerCase();
-        out.basis = "GB50017-2017";
         return out;
       }
     }
   };
 
   let query = function (typeName, thickness) {
-    return _lookup(gb500172017Data, typeName, thickness);
+    return _lookup(_gb500172017Data, typeName, thickness);
   };
 
   return {
-    basis: "GB50017-2017",
+    basises: ["GB50017-2017"],
     query: query,
     gb500172017: { query: query },
   };
