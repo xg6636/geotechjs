@@ -1,7 +1,7 @@
 // groundwater functions
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 23:50:09
-// last modified at 2023-11-12 20:52:34
+// last modified at 2023-11-12 21:10:09
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -42,7 +42,7 @@ const groundwater = {
     },
 
     getFilterLength(a) {
-      // param a: sample {well_capacity:1200, filter_diameter: 0.6, filter_ne: 0.4, k: 18}
+      // param a: sample {well_capacity:1200, filter_diameter: 0.3, filter_ne: 0.4, k: 18}
       let k = Number(a.k) / 24 / 3600;
       let v = Math.sqrt(k) / 15;
       let q = Number(a.well_capacity) / 24 / 3600;
