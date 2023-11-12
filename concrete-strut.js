@@ -1,17 +1,19 @@
 // 支撑轴压比计算
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 14:39:51
-// last modified at 2023-11-10 16:09:51
+// last modified at 2023-11-11 12:38:15
 //
 // copyright (c) 2022 - 2023 Jack Hsu
-
-
 
 const concreteStrut = {
   getAxialStrength(a) {
     // param a: sample { width: "700", height: "800", concrete_level: "C30" }
-    const s = Number(a.width) * Number(a.height);
-    return materialConcrete.queryFc(a.concrete_level) * s * 0.001;
+    return (
+      materialConcrete.queryFc(a.concrete_level) *
+      Number(a.width) *
+      Number(a.height) *
+      0.001
+    );
   },
 
   getAxialForce(a) {
@@ -25,9 +27,18 @@ const concreteStrut = {
   },
 
   evaluate(a) {
-    const f = this.getAxialForce(a);
-    const r = this.getAxialStrength(a);
-    const f_r = (f / r).toFixed(3);
-    return `轴力: ${f.toFixed(3)} kN \n支撑强度: ${r.toFixed(3)} kN \n轴压比: ${f_r}`;
+    let out = {
+      axialForce: 0.0,
+      axialStrength: 0.0,
+      axialFSRatio: 0.0,
+      displayAxialFSRatio: "",
+    };
+    out.axialForce = this.getAxialForce(a);
+    out.axialStrength = this.getAxialStrength(a);
+    out.axialFSRatio = (f / r).toFixed(3);
+    out.displayAxialFSRatio = `轴力: ${out.axialForce.toFixed(3)} kN 
+                            \n支撑强度: ${out.axialStrength.toFixed(3)} kN 
+                            \n轴压比: ${out.axialFSRatio}`;
+    return out;
   },
 };

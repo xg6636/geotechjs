@@ -1,15 +1,13 @@
 // jgj/t199-2010 model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 16:09:33
+// last modified at 2023-11-12 18:05:22
 //
 // copyright (c) 2023 Jack Hsu
 
 
 
 const modelJGJT1992010 = {
-    // require modelSMW,
-    // maybe it's from model-smw.js.
     constant: {
         gammaf: 1.25,
         gamma0: {
@@ -22,8 +20,8 @@ const modelJGJT1992010 = {
     preprocessPitData(pitData) {
         let ret = { pitLevel: pitData.level.toLowerCase() };
         ret.norms = Array.isArray(pitData.norms) ? pitData.norms : undefined;
-        ret.gammaf = pitData.gammaf == undefined ? this.constant.gammaf : pitData.gammaf;
-        ret.gamma0 = pitData.gamma0 == undefined ? this.constant.gamma0[ret.pitLevel] : pitData.gamma0;
+        ret.gammaf = pitData.gammaf ?? this.constant.gammaf;
+        ret.gamma0 = pitData.gamma0 ?? this.constant.gamma0[ret.pitLevel];
         return ret;
     },
 
