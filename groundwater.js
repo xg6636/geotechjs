@@ -1,7 +1,7 @@
 // groundwater functions
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 23:50:09
-// last modified at 2023-11-11 12:42:18
+// last modified at 2023-11-12 20:08:00
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -28,11 +28,15 @@ const groundwater = {
   tubeWell: {
     basises: ["JGJ120-2012", "工程地质手册（第五版）"],
     getMaxCapacity(a) {
-      // param a: sample {filter_radius: 0.3, filter_length: 18, k: 18}
+      // param a: sample {filter_radius: 0.15, filter_length: 18, k: 18}
       let out = 120 * Math.PI;
       out = out * Number(a.filter_radius) * Number(a.filter_length);
       out = out * Math.pow(Number(a.k), 0.333333333);
-      return { basis: "JGJ120-2012", value: out };
+      return {
+        basis: "JGJ120-2012",
+        value: out,
+        displayValue: `单井出水能力:${out.toFixed(3)}m3/d[${(out / 24.0).toFixed(3)}m3/h]`,
+      };
     },
     getFilterLength(a) {
       // param a: sample {well_capacity:1200, filter_diameter: 0.6, filter_ne: 0.4, k: 18}

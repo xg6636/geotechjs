@@ -1,7 +1,7 @@
 // smw model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-10 16:09:25
+// last modified at 2023-11-12 19:44:18
 //
 // copyright (c) 2023 Jack Hsu
 
@@ -28,7 +28,13 @@ const modelSMW = {
         h850x300x17x31: { a: 324.7, g: 255, ix: 389234, sx: 5205, wx: 9073 },
     },
 
-    shapeSteel: {
+    shapedSteel: {
+        fromDataDescription: {
+            ss_kind: "型钢类型，如：'h700x300x13x20'。",
+            ss_material: "型钢材料，如：'q355'。",
+            ss_distance: "型钢间距，以mm计。",
+        },
+
         fromData(raw) {
             let ss = {
                 id: raw.ss_kind,
@@ -66,8 +72,10 @@ const modelSMW = {
 
         toHTML(data) {
             let a;
-            a = `<li>截面尺寸为 \\( ${data.h} \\times ${data.b} \\times ${data.tw} \\times ${data.t} \\) ，</li>
-                <li>\\( ${data.material.toUpperCase()}， f_y= ${data.fy} N/mm^2， f= ${data.f} N/mm^2， f_v= ${data.fv} N/mm^2 \\)，</li>
+            a = `<li>截面尺寸为 \\( ${data.h} \\times ${data.b} \\times ${data.tw
+                } \\times ${data.t} \\) ，</li>
+                <li>\\( ${data.material.toUpperCase()}， f_y= ${data.fy
+                } N/mm^2， f= ${data.f} N/mm^2， f_v= ${data.fv} N/mm^2 \\)，</li>
                 <li>\\( I_x= ${data.ix} cm^4 \\)，</li>
                 <li>\\( S_x= ${data.sx} cm^3 \\)，</li>
                 <li>\\( W_x= ${data.wx} cm^3 \\)，</li>
@@ -77,10 +85,18 @@ const modelSMW = {
     },
 
     dsm: {
+        fromDataDescription: {
+            dsm_kind: "类型，'wall' 或 'round'。",
+            dsm_thickness: "墙厚，以mm计。",
+            dsm_round_parameter: "圆桩参数，如：'d850@600'，'d'不能少。",
+            dsm_diameter: "桩径，以mm计，优先级高于 dsm_round_parameter，本字段不空的话，会覆盖掉 dsm_round_parameter的值。",
+            dsm_distance: "桩间距，以mm计，优先级高于 dsm_round_parameter，本字段不空的话，会覆盖掉 dsm_round_parameter的值。",
+        },
+
         fromData(raw) {
             let dsm = {
                 strength: Number(raw.dsm_strength),
-                kind: raw.dsm_kind,
+                kind: raw.dsm_kind.toLowerCase(),
                 displayKind: "",
             };
 
@@ -88,8 +104,18 @@ const modelSMW = {
                 dsm.thickness = Number(raw.dsm_thickness);
                 dsm.displayKind = dsm.thickness + "mm搅拌墙";
             } else {
-                dsm.diameter = Number(raw.dsm_diameter);
-                dsm.distance = Number(raw.dsm_distance);
+                let rp = dat.dsm_round_parameter;
+                if (!rp) {
+                    rp = rp.split('@');
+                    dat.dsm_distance = Number(rp[1]);
+                    dat.dsm_diameter = Number(rp[0].substr(1));
+                }
+                if (!raw.dsm_diameter) {
+                    dsm.diameter = Number(raw.dsm_diameter);
+                }
+                if (!raw.dsm_distance) {
+                    dsm.distance = Number(raw.dsm_distance);
+                }
                 dsm.displayKind = "d" + dsm.diameter + "@" + dsm.distance + "搅拌桩";
             }
 
