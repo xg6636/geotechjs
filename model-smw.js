@@ -1,7 +1,7 @@
 // smw model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-12 19:44:18
+// last modified at 2023-11-13 11:06:39
 //
 // copyright (c) 2023 Jack Hsu
 
@@ -104,11 +104,11 @@ const modelSMW = {
                 dsm.thickness = Number(raw.dsm_thickness);
                 dsm.displayKind = dsm.thickness + "mm搅拌墙";
             } else {
-                let rp = dat.dsm_round_parameter;
+                let rp = raw.dsm_round_parameter;
                 if (!rp) {
                     rp = rp.split('@');
-                    dat.dsm_distance = Number(rp[1]);
-                    dat.dsm_diameter = Number(rp[0].substr(1));
+                    raw.dsm_distance = Number(rp[1]);
+                    raw.dsm_diameter = Number(rp[0].substr(1));
                 }
                 if (!raw.dsm_diameter) {
                     dsm.diameter = Number(raw.dsm_diameter);
