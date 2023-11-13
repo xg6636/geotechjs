@@ -1,7 +1,7 @@
 // 支撑轴压比计算
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 14:39:51
-// last modified at 2023-11-11 12:38:15
+// last modified at 2023-11-13 18:39:15
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -35,10 +35,9 @@ const concreteStrut = {
     };
     out.axialForce = this.getAxialForce(a);
     out.axialStrength = this.getAxialStrength(a);
-    out.axialFSRatio = (f / r).toFixed(3);
-    out.displayAxialFSRatio = `轴力: ${out.axialForce.toFixed(3)} kN 
-                            \n支撑强度: ${out.axialStrength.toFixed(3)} kN 
-                            \n轴压比: ${out.axialFSRatio}`;
+    out.axialFSRatio = (out.axialForce / out.axialStrength).toFixed(3);
+    out.displayAxialFSRatio = `轴压比: ${out.axialFSRatio}，
+                            其中，轴力: ${out.axialForce.toFixed(3)}kN，支撑强度: ${out.axialStrength.toFixed(3)}kN`;
     return out;
   },
 };
