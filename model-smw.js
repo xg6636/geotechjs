@@ -1,11 +1,9 @@
 // smw model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-13 11:06:39
+// last modified at 2023-11-13 12:36:25
 //
 // copyright (c) 2023 Jack Hsu
-
-
 
 const modelSMW = {
     // require materialSteel,
@@ -72,10 +70,8 @@ const modelSMW = {
 
         toHTML(data) {
             let a;
-            a = `<li>截面尺寸为 \\( ${data.h} \\times ${data.b} \\times ${data.tw
-                } \\times ${data.t} \\) ，</li>
-                <li>\\( ${data.material.toUpperCase()}， f_y= ${data.fy
-                } N/mm^2， f= ${data.f} N/mm^2， f_v= ${data.fv} N/mm^2 \\)，</li>
+            a = `<li>截面尺寸为 \\( ${data.h} \\times ${data.b} \\times ${data.tw} \\times ${data.t} \\) ，</li>
+                <li>\\( ${data.material.toUpperCase()}， f_y= ${data.fy} N/mm^2， f= ${data.f} N/mm^2， f_v= ${data.fv} N/mm^2 \\)，</li>
                 <li>\\( I_x= ${data.ix} cm^4 \\)，</li>
                 <li>\\( S_x= ${data.sx} cm^3 \\)，</li>
                 <li>\\( W_x= ${data.wx} cm^3 \\)，</li>
@@ -89,8 +85,10 @@ const modelSMW = {
             dsm_kind: "类型，'wall' 或 'round'。",
             dsm_thickness: "墙厚，以mm计。",
             dsm_round_parameter: "圆桩参数，如：'d850@600'，'d'不能少。",
-            dsm_diameter: "桩径，以mm计，优先级高于 dsm_round_parameter，本字段不空的话，会覆盖掉 dsm_round_parameter的值。",
-            dsm_distance: "桩间距，以mm计，优先级高于 dsm_round_parameter，本字段不空的话，会覆盖掉 dsm_round_parameter的值。",
+            dsm_diameter:
+                "桩径，以mm计，优先级高于 dsm_round_parameter，本字段不空的话，会覆盖掉 dsm_round_parameter的值。",
+            dsm_distance:
+                "桩间距，以mm计，优先级高于 dsm_round_parameter，本字段不空的话，会覆盖掉 dsm_round_parameter的值。",
         },
 
         fromData(raw) {
@@ -101,29 +99,34 @@ const modelSMW = {
             };
 
             if (dsm.kind.toLowerCase() == "wall") {
+                dsm.displayKind = `搅拌墙`;
                 dsm.thickness = Number(raw.dsm_thickness);
-                dsm.displayKind = dsm.thickness + "mm搅拌墙";
+                dsm.plainDescription = `${dsm.thickness}mm${dsm.displayKind}`;
+                dsm.description = `\\(${dsm.thickness}mm\\)${dsm.displayKind}`;
             } else {
+                dsm.displayKind = `搅拌桩`;
                 let rp = raw.dsm_round_parameter;
-                if (!rp) {
-                    rp = rp.split('@');
-                    raw.dsm_distance = Number(rp[1]);
-                    raw.dsm_diameter = Number(rp[0].substr(1));
+                if (rp) {
+                    rp = rp.split("@");
+                    dsm.diameter = Number(rp[0].substr(1));
+                    dsm.distance = Number(rp[1]);
                 }
-                if (!raw.dsm_diameter) {
+                if (raw.dsm_diameter) {
                     dsm.diameter = Number(raw.dsm_diameter);
                 }
-                if (!raw.dsm_distance) {
+                if (raw.dsm_distance) {
                     dsm.distance = Number(raw.dsm_distance);
                 }
-                dsm.displayKind = "d" + dsm.diameter + "@" + dsm.distance + "搅拌桩";
+                dsm.plainDescription = `d${dsm.diameter}@${dsm.distance}${dsm.displayKind}`;
+                dsm.description = `\\(\\phi${dsm.diameter}@${dsm.distance}\\)${dsm.displayKind}`;
             }
 
             return dsm;
         },
 
         toHTML(data) {
-            return `<li>${data.displayKind} ，</li> <li>水泥土强度：\\( ${data.strength} MPa \\)。</li>`;
+            return `<li>${data.description} ，</li> 
+                    <li>水泥土强度：\\(${data.strength} MPa\\)。</li>`;
         },
     },
 };

@@ -1,38 +1,40 @@
 // 钢材强度
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-12 16:46:13
+// last modified at 2023-11-13 12:15:46
 //
 // copyright (c) 2023 Jack Hsu
 
 
 
 const materialSteel = (function () {
-  const _gb500172017Data = {
-    name: "GB50017-2017",
-    q235: {
-      t16: [215, 125, 320, 235, 370],
-      t40: [205, 120, 320, 225, 370],
-      t100: [200, 115, 320, 215, 370],
-      ts: [16, 40, 100],
-    },
+  const _data = {
+    gb500172017: {
+      name: "GB50017-2017",
+      q235: {
+        t16: [215, 125, 320, 235, 370],
+        t40: [205, 120, 320, 225, 370],
+        t100: [200, 115, 320, 215, 370],
+        ts: [16, 40, 100],
+      },
 
-    q345: {
-      t16: [305, 175, 400, 345, 470],
-      t40: [295, 170, 400, 335, 470],
-      t63: [290, 165, 400, 325, 470],
-      t80: [280, 160, 400, 315, 470],
-      t100: [270, 155, 400, 305, 470],
-      ts: [16, 40, 63, 80, 100],
-    },
+      q345: {
+        t16: [305, 175, 400, 345, 470],
+        t40: [295, 170, 400, 335, 470],
+        t63: [290, 165, 400, 325, 470],
+        t80: [280, 160, 400, 315, 470],
+        t100: [270, 155, 400, 305, 470],
+        ts: [16, 40, 63, 80, 100],
+      },
 
-    q355: {
-      t16: [305, 175, 400, 345, 470],
-      t40: [295, 170, 400, 335, 470],
-      t63: [290, 165, 400, 325, 470],
-      t80: [280, 160, 400, 315, 470],
-      t100: [270, 155, 400, 305, 470],
-      ts: [16, 40, 63, 80, 100],
+      q355: {
+        t16: [305, 175, 400, 345, 470],
+        t40: [295, 170, 400, 335, 470],
+        t63: [290, 165, 400, 325, 470],
+        t80: [280, 160, 400, 315, 470],
+        t100: [270, 155, 400, 305, 470],
+        ts: [16, 40, 63, 80, 100],
+      },
     },
   };
 
@@ -40,10 +42,18 @@ const materialSteel = (function () {
     return { f: a[0], fv: a[1], fce: a[2], fy: a[3], fu: a[4] };
   };
 
-  let _lookup = function (kind, th, guidelineData) {
+  let _getData = function (guidelineNumber) {
+    let gn = guidelineNumber ?? "gb500172017";
+    gn = gn.toLowerCase();
+    gn = gn.replace("-", "");
+    gn = gn.replace("/", "");
+    return _data[gn] ?? _data.gb500172017;
+  };
+
+  let _lookup = function (kind, th, guidelineNumber) {
     kind = kind.toLowerCase();
     th = Number(th);
-    const gd = guidelineData ?? _gb500172017Data;
+    const gd = _getData(guidelineNumber);
     const v = gd[kind];
     if (v == undefined) {
       return undefined;
@@ -62,8 +72,8 @@ const materialSteel = (function () {
     }
   };
 
-  let query = function (typeName, thickness) {
-    return _lookup(typeName, thickness);
+  let query = function (typeName, thickness, guidelineNumber) {
+    return _lookup(typeName, thickness, guidelineNumber);
   };
 
   return {
