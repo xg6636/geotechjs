@@ -1,7 +1,7 @@
 // smw model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-13 12:36:25
+// last modified at 2023-11-15 11:56:42
 //
 // copyright (c) 2023 Jack Hsu
 
@@ -70,12 +70,12 @@ const modelSMW = {
 
         toHTML(data) {
             let a;
-            a = `<li>截面尺寸为 \\( ${data.h} \\times ${data.b} \\times ${data.tw} \\times ${data.t} \\) ，</li>
-                <li>\\( ${data.material.toUpperCase()}， f_y= ${data.fy} N/mm^2， f= ${data.f} N/mm^2， f_v= ${data.fv} N/mm^2 \\)，</li>
-                <li>\\( I_x= ${data.ix} cm^4 \\)，</li>
-                <li>\\( S_x= ${data.sx} cm^3 \\)，</li>
-                <li>\\( W_x= ${data.wx} cm^3 \\)，</li>
-                <li>间距为 \\( ${data.distance} mm \\)。</li> `;
+            a = `<li>截面尺寸为 $ ${data.h} \\times ${data.b} \\times ${data.tw} \\times ${data.t} $ ，</li>
+                <li>$ ${data.material.toUpperCase()}， f_y= ${data.fy} N/mm^2， f= ${data.f} N/mm^2， f_v= ${data.fv} N/mm^2 $，</li>
+                <li>$ I_x= ${data.ix} cm^4 $，</li>
+                <li>$ S_x= ${data.sx} cm^3 $，</li>
+                <li>$ W_x= ${data.wx} cm^3 $，</li>
+                <li>间距为 $ ${data.distance} mm $。</li> `;
             return a;
         },
     },
@@ -102,7 +102,7 @@ const modelSMW = {
                 dsm.displayKind = `搅拌墙`;
                 dsm.thickness = Number(raw.dsm_thickness);
                 dsm.plainDescription = `${dsm.thickness}mm${dsm.displayKind}`;
-                dsm.description = `\\(${dsm.thickness}mm\\)${dsm.displayKind}`;
+                dsm.description = `$${dsm.thickness}mm$${dsm.displayKind}`;
             } else {
                 dsm.displayKind = `搅拌桩`;
                 let rp = raw.dsm_round_parameter;
@@ -118,7 +118,7 @@ const modelSMW = {
                     dsm.distance = Number(raw.dsm_distance);
                 }
                 dsm.plainDescription = `d${dsm.diameter}@${dsm.distance}${dsm.displayKind}`;
-                dsm.description = `\\(\\phi${dsm.diameter}@${dsm.distance}\\)${dsm.displayKind}`;
+                dsm.description = `$\\phi${dsm.diameter}@${dsm.distance}$${dsm.displayKind}`;
             }
 
             return dsm;
@@ -126,7 +126,7 @@ const modelSMW = {
 
         toHTML(data) {
             return `<li>${data.description} ，</li> 
-                    <li>水泥土强度：\\(${data.strength} MPa\\)。</li>`;
+                    <li>水泥土强度：$${data.strength} MPa$。</li>`;
         },
     },
 };

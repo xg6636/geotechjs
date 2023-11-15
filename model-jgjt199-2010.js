@@ -1,7 +1,7 @@
 // jgj/t199-2010 model
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-03 14:39:51
-// last modified at 2023-11-12 18:05:22
+// last modified at 2023-11-15 00:30:16
 //
 // copyright (c) 2023 Jack Hsu
 
@@ -41,13 +41,13 @@ const modelJGJT1992010 = {
 
         resultToHTML(r) {
             let a = `根据JGJ/T199-2010公式4.2.4-1，
-                \\[ \\begin{align}
+                $$ \\begin{align}
                 \\frac{ ${r.gammaf} \\gamma_0M_k}{W_x}
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.mk} \\div ${r.w} \\times 1000 \\\\
                 &= ${r.result} N/mm^2
                 ${r.quality == 1
-                    ? `\\leq f = ${r.f} N/mm^2 \\end{align} \\] 型钢抗弯强度<b>满足要求</b >。`
-                    : `\\gt f = ${r.f} N/mm^2 \\end{align} \\] 型钢抗弯强度<span class='red-bold'>不满足要求</span>。`
+                    ? `\\leq f = ${r.f} N/mm^2 \\end{align} $$ 型钢抗弯强度<b>满足要求</b >。`
+                    : `\\gt f = ${r.f} N/mm^2 \\end{align} $$ 型钢抗弯强度<span class='red-bold'>不满足要求</span>。`
                 }`;
             return a;
         },
@@ -75,14 +75,14 @@ const modelJGJT1992010 = {
 
         resultToHTML(r) {
             let a = `根据JGJ/T199-2010公式4.2.4-2，
-                \\[ \\begin{align}
+                $$ \\begin{align}
                 \\frac{ ${r.gammaf} \\gamma_0V_kS}{It_w}
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.vk} \\times ${r.s} 
                 \\div ${r.i} \\div ${r.tw} \\times 1000 \\\\
                 &= ${r.result} N/mm^2
                 ${r.quality == 1
-                    ? `\\leq f_v= ${r.fv} N/mm^2 \\end{align} \\] 型钢抗剪强度<b>满足要求</b>。`
-                    : `\\gt f_v= ${r.fv} N/mm^2 \\end{align} \\] 型钢抗剪强度<span class='red-bold'>不满足要求</span>。`
+                    ? `\\leq f_v= ${r.fv} N/mm^2 \\end{align} $$ 型钢抗剪强度<b>满足要求</b>。`
+                    : `\\gt f_v= ${r.fv} N/mm^2 \\end{align} $$ 型钢抗剪强度<span class='red-bold'>不满足要求</span>。`
                 }`;
             return a;
         },
@@ -119,25 +119,25 @@ const modelJGJT1992010 = {
             let a;
             a = `<p>
                 根据JGJ/T199-2010公式4.2.5-4，
-                \\[ \\tau=\\frac{\\tau_{ck}}{1.6}
+                $$ \\tau=\\frac{\\tau_{ck}}{1.6}
                 = ${r.tauck} \\div 1.6
-                = ${r.tau} N/mm^2 \\]
+                = ${r.tau} N/mm^2 $$
                 </p>
                 <p>
                 根据JGJ/T199-2010公式4.2.5-3，
-                \\[ V_{1k}=q_kL_1/2
+                $$ V_{1k}=q_kL_1/2
                 = ${r.qk} \\times ${r.l1} \\div 2
-                = ${r.v1k} N/mm \\]
+                = ${r.v1k} N/mm $$
                 </p>
                 <p>
                 根据JGJ/T199-2010公式4.2.5-2，
-                \\[ \\begin{align}
+                $$ \\begin{align}
                 \\tau_1 &=\\frac{ ${r.gammaf} \\gamma_0V_{1k}}{d_{e1}} \\\\
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.v1k} \\div ${r.de1} \\\\
                 &= ${r.tau1} N/mm^2
                 ${r.quality == 1
-                    ? `\\leq \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<b>满足要求</b>。`
-                    : `\\gt \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`
+                    ? `\\leq \\tau=${r.tau} N/mm^2 \\end{align} $$ 水泥土局部受剪<b>满足要求</b>。`
+                    : `\\gt \\tau=${r.tau} N/mm^2 \\end{align} $$ 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`
                 }
                 </p>`;
             return a;
@@ -188,25 +188,25 @@ const modelJGJT1992010 = {
                 ? `<p>H型钢为密插型，无需验算水泥土最薄弱截面局部受剪承载力。</p>`
                 : `<p>
                 根据JGJ/T199-2010公式4.2.5-4，
-                \\[ \\tau=\\frac{\\tau_{ck}}{1.6}
+                $$ \\tau=\\frac{\\tau_{ck}}{1.6}
                 = ${r.tauck} \\div 1.6
-                = ${r.tau} N/mm^2 \\]
+                = ${r.tau} N/mm^2 $$
                 </p>
                 <p>
                 根据JGJ/T199-2010公式4.2.5-7，
-                \\[ V_{2k}=q_kL_2/2
+                $$ V_{2k}=q_kL_2/2
                 = ${r.qk} \\times ${r.l2} \\div 2
-                = ${r.v2k} N/mm \\]
+                = ${r.v2k} N/mm $$
                 </p>
                 <p>
                 根据JGJ/T199-2010公式4.2.5-6，
-                \\[ \\begin{align}
+                $$ \\begin{align}
                 \\tau_2 &=\\frac{ ${r.gammaf} \\gamma_0V_{2k}}{d_{e2}} \\\\
                 &= ${r.gammaf} \\times ${r.gamma0} \\times ${r.v2k} \\div ${r.de2} \\\\
                 &= ${r.tau2} N/mm^2
                 ${r.quality == 1
-                    ? `\\leq \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<b>满足要求</b>。`
-                    : `\\gt \\tau=${r.tau} N/mm^2 \\end{align} \\] 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`
+                    ? `\\leq \\tau=${r.tau} N/mm^2 \\end{align} $$ 水泥土局部受剪<b>满足要求</b>。`
+                    : `\\gt \\tau=${r.tau} N/mm^2 \\end{align} $$ 水泥土局部受剪<span class='red-bold'>不满足要求</span>。`
                 }
                 </p>`
                 }`;
