@@ -1,7 +1,7 @@
 // utilities
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/02 10:08:21
-// last modified at 2023-11-12 21:11:01
+// last modified at 2023-11-16 11:43:48
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -24,12 +24,18 @@ function getFormData(formId) {
     return d;
 }
 
-function createFormObjectByItemId(formName) {
-    // Caution: out’s property value is string!
-    let out = {};
-    let frm = document.forms[formName];
-    for (i = 0; i < frm.length; i++) {
-        out[frm[i].id] = frm[i].value;
-    }
-    return out;
+function radianToDegree(x) {
+    return (x * 180.0) / Math.PI;
+}
+
+function degreeToRadian(x) {
+    return (x * Math.PI) / 180.0;
+}
+
+function normalizeGuidelineNumber(x, defaultNumber) {
+    let gn = x ?? defaultNumber;
+    gn = gn.toLowerCase();
+    gn = gn.replace("-", "");
+    gn = gn.replace("/", "");
+    return gn;
 }
