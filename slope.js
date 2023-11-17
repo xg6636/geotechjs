@@ -1,96 +1,121 @@
 // 边坡计算
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2023-11-15 23:58:45
-// last modified at 2023-11-16 17:59:51
+// last modified at 2023-11-17 22:34:59
 //
 // copyright (c) 2023 Jack Hsu
 
 
 
 const slope = (function () {
-    let _slopingForce = {
-        _importRaw: function (raw) {
+    const _slope = {
+        makeSoilMass: function (gravity, cohesion, frictionAngle) {
             return {
-                safetyFactor: raw.safety_factor ?? 1.0,
-                upperForce: raw.upper_force ?? 0,
-                upperSurfaceAngle: raw.upper_surface_angle ?? 60,
-                myGravity: raw.my_gravity ?? 0,
-                mySurfaceAngle: raw.my_surface_angle ?? 45,
-                mySurfaceLength: raw.my_surface_length ?? 1,
-                surfaceCohesion: raw.surface_c ?? 1,
-                surfaceFrictionAngle: raw.surface_phi ?? 1,
+                gravity: (0 < gravity) ? Number(gravity) : 0,
+                cohesion: (0 < cohesion) ? Number(cohesion) : 0,
+                frictionAngle: (0 < frictionAngle) ? Number(frictionAngle) : 0,
             };
         },
 
-        gb500072011: function (raw) {
-            let data = this._importRaw(raw);
-            for (const [key, value] of Object.entries(data)) {
-                data[key] = Number(value);
-            }
+        makeSlipSurface: function (angle, length, cohesion, frictionAngle) {
+            return {
+                angle: (0 < angle) ? Number(angle) : 0,
+                length: (0 < length) ? Number(length) : 0,
+                cohesion: (0 < cohesion) ? Number(cohesion) : 0,
+                frictionAngle: (0 < frictionAngle) ? Number(frictionAngle) : 0,
+            };
+        },
 
-            let bn = degreeToRadian(data.mySurfaceAngle);
-            let bn1n = degreeToRadian(data.upperSurfaceAngle - data.mySurfaceAngle);
-            let tgyn = Math.tan(degreeToRadian(data.surfaceFrictionAngle));
-
-            data.outPsi = Math.cos(bn1n) - Math.sin(bn1n) * tgyn;
-            data.outGnt = data.myGravity * Math.sin(bn);
-            data.outGnn = data.myGravity * Math.cos(bn);
-            data.outFn = data.upperForce * data.outPsi;
-            data.outFn += data.safetyFactor * data.outGnt;
-            data.outFn -= data.outGnn * tgyn;
-            data.outFn -= data.surfaceCohesion * data.mySurfaceLength;
-            data.basis = "GB50007-2011";
-            data.resultToHTML = `Fn=${data.outFn.toFixed(3)}kN，<br>&psi;=${data.outPsi.toFixed(3)}`;
-
-            return data;
+        makeSlidingBlock: function (slipSurface, gravity) {
+            return {
+                slipSurface: slipSurface ?? null,
+                gravity: (0 < gravity) ? Number(gravity) : 0,
+            };
         },
     };
 
-    let _slopeStability = {
-        _importRaw: function (raw) {
-            return {
-                extraVerticalLoad: raw.extra_vertical_load ?? 0,
-                extraHorizontalLoad: raw.horizontal_load ?? 0,
-                myGravity: raw.my_gravity ?? 0,
-                mySurfaceAngle: raw.my_surface_angle ?? 45,
-                mySurfaceLength: raw.my_surface_length ?? 1,
-                surfaceCohesion: raw.surface_c ?? 1,
-                surfaceFrictionAngle: raw.surface_phi ?? 1,
-                waterHeight: raw.water_height ?? 0,
-            };
-        },
+    let _gb500072011Formula643 = function (currentBlock, upperBlock, forceFromUpper, safetyFactor) {
+        let cb = currentBlock;
+        let ub = upperBlock;
 
-        gb503302013: function (raw) {
-            let data = this._importRaw(raw);
-            for (const [key, value] of Object.entries(data)) {
-                data[key] = Number(value);
-            }
+        let bn = degreeToRadian(cb.slipSurface.angle);
+        let bn1n = degreeToRadian(ub.slipSurface.angle - cb.slipSurface.angle);
+        let tgyn = Math.tan(degreeToRadian(cb.slipSurface.frictionAngle));
 
-            const rw = 9.8;
-            const b = degreeToRadian(data.mySurfaceAngle);
-            const cb = Math.cos(b);
-            const sb = Math.sin(b);
-            const l = data.mySurfaceLength;
-            const gg = data.myGravity + data.extraVerticalLoad;
+        let out = { basis: "GB50007-2011", };
+        out.outPsi = Math.cos(bn1n) - Math.sin(bn1n) * tgyn;
 
-            data.outV = 0.5 * rw * data.waterHeight ** 2;
-            data.outU = 0.5 * rw * data.waterHeight * l;
+        out.outGnt = cb.gravity * Math.sin(bn);
+        out.outGnn = cb.gravity * Math.cos(bn);
 
-            data.outR = gg * cb;
-            data.outR -= data.extraHorizontalLoad * sb + data.outV * sb + data.outU;
-            data.outR *= Math.tan(degreeToRadian(data.surfaceFrictionAngle));
-            data.outR += data.surfaceCohesion * l;
+        out.outFn = forceFromUpper * out.outPsi;
+        out.outFn += safetyFactor * out.outGnt;
+        out.outFn -= out.outGnn * tgyn;
+        out.outFn -= cb.slipSurface.cohesion * cb.slipSurface.length;
 
-            data.outT = gg * sb + data.extraHorizontalLoad * cb + data.outV * cb;
+        out.resultToHTML = `Fn=${out.outFn.toFixed(3)}kN，<br>&psi;=${out.outPsi.toFixed(3)}`;
 
-            data.outFs = data.outR / data.outT;
+        return out;
+    };
 
-            data.basis = "GB50330-2013";
-            data.displayResult = `Fs=${data.outFs.toFixed(3)}，
-                                    R=${data.outR.toFixed(3)}kN，T=${data.outT.toFixed(3)}kN`;
+    let _gb503302013FormulaA02 = function (block, verticalLoad, horizontalLoad, waterHeight) {
+        const rw = 9.8;
+        const b = degreeToRadian(block.slipSurface.angle);
+        const cb = Math.cos(b);
+        const sb = Math.sin(b);
+        const l = block.slipSurface.length;
+        const gg = block.gravity + Number(verticalLoad);
 
-            return data;
-        },
+        let out = { basis: "GB50330-2013", };
+        out.outV = 0.5 * rw * waterHeight ** 2;
+        out.outU = 0.5 * rw * waterHeight * l;
+
+        out.outR = gg * cb;
+        out.outR -= Number(horizontalLoad) * sb + out.outV * sb + out.outU;
+        out.outR *= Math.tan(degreeToRadian(block.slipSurface.frictionAngle));
+        out.outR += block.slipSurface.cohesion * l;
+
+        out.outT = gg * sb + Number(horizontalLoad) * cb + out.outV * cb;
+
+        out.outFs = out.outR / out.outT;
+
+        out.basis = "GB50330-2013";
+        out.displayResult = `Fs=${out.outFs.toFixed(3)}，
+                                R=${out.outR.toFixed(3)}kN，T=${out.outT.toFixed(3)}kN`;
+
+        console.log(block);
+
+        console.log(out);
+        return out;
+    };
+
+    let _gb503302013Formula6210 = function (height, angle, soilMass) {
+        let r = soilMass.gravity;
+
+        let out = { basis: "GB50330-2013", };
+        out.outEta = 2 * soilMass.cohesion / r / height;
+
+        let y = degreeToRadian(soilMass.frictionAngle);
+        let a = degreeToRadian(angle);
+
+        let p = 1 / Math.tan(a) / (out.outEta + Math.tan(y));
+        p = Math.sqrt(1 + p);
+        p = Math.cos(y) / (p - Math.sin(y));
+        out.outTheta = Math.atan(p);
+
+        p = 1 / Math.tan(out.outTheta) - 1 / Math.tan(a);
+        p *= Math.tan(out.outTheta - y);
+        p -= out.outEta * Math.cos(y) / Math.sin(out.outTheta) / Math.cos(out.outTheta - y);
+        out.outKa = p;
+
+        out.outTheta = radianToDegree(out.outTheta);
+
+        out.outEa = 0.5 * r * height ** 2 * out.outKa;
+
+        out.resultToHTML = `Ea=${out.outEa.toFixed(3)}kN/m，&theta;=${out.outTheta.toFixed(3)}&deg;
+                            <br>Ka=${out.outKa.toFixed(3)}，&eta;=${out.outEta.toFixed(3)}`;
+
+        return out;
     };
 
     let _retainingWall = {
@@ -120,7 +145,7 @@ const slope = (function () {
                 const y = degreeToRadian(data.soilFrictionAngle);
                 const r = data.soilGravity;
 
-                data.outEta = 2 * data.soilCohesion / r / data.wallHeight;
+                data.outEta = (2 * data.soilCohesion) / r / data.wallHeight;
                 const g = data.outEta;
 
                 data.outKq = 2 * data.topVerticalLoad * Math.sin(a) * Math.cos(b);
@@ -138,9 +163,9 @@ const slope = (function () {
                 ka3 *= Math.sqrt(kq * Math.sin(a - c) * Math.sin(y + c) + g * Math.sin(a) * Math.cos(y));
 
                 data.outKa -= ka3;
-                data.outKa *= Math.sin(a + b) / (Math.sin(a) ** 2) / (Math.sin(a + b - y - c) ** 2);
+                data.outKa *= Math.sin(a + b) / Math.sin(a) ** 2 / Math.sin(a + b - y - c) ** 2;
 
-                data.outEa = 0.5 * r * (data.wallHeight ** 2) * data.outKa;
+                data.outEa = 0.5 * r * data.wallHeight ** 2 * data.outKa;
 
                 data.basis = "GB50330-2013";
                 data.resultToHTML = `Ea=${data.outEa.toFixed(3)}kN/m，<br>
@@ -164,13 +189,15 @@ const slope = (function () {
                 const d = degreeToRadian(data.rockSlopeAngle);
                 const dc = degreeToRadian(data.rockSlopeFrictionAngle);
 
-                data.outEta = 2 * data.soilCohesion / data.soilGravity / data.wallHeight;
+                data.outEta =
+                    (2 * data.soilCohesion) / data.soilGravity / data.wallHeight;
 
-                data.outKa = Math.sin(a + d) * Math.sin(d - dc) / (Math.sin(a) ** 2);
-                data.outKa -= data.outEta * Math.cos(dc) / Math.sin(a);
-                data.outKa *= Math.sin(a + b) / Math.sin(a - c + d - dc) / Math.sin(d - b);
+                data.outKa = (Math.sin(a + d) * Math.sin(d - dc)) / Math.sin(a) ** 2;
+                data.outKa -= (data.outEta * Math.cos(dc)) / Math.sin(a);
+                data.outKa *=
+                    Math.sin(a + b) / Math.sin(a - c + d - dc) / Math.sin(d - b);
 
-                data.outEa = 0.5 * data.soilGravity * (data.wallHeight ** 2) * data.outKa;
+                data.outEa = 0.5 * data.soilGravity * data.wallHeight ** 2 * data.outKa;
 
                 data.basis = "GB50330-2013";
                 data.resultToHTML = `Ea=${data.outEa.toFixed(3)}kN/m，<br>
@@ -178,55 +205,48 @@ const slope = (function () {
 
                 return data;
             },
-        }
-    };
-
-    let _getSlopingForce = function (raw, guidelineNumber) {
-        let gn = normalizeGuidelineNumber(guidelineNumber, "GB50007-2011");
-
-        return _slopingForce[gn] ? _slopingForce[gn](raw) : _slopingForce.gb500072011(raw);
-    };
-
-    let _getStability = function (raw, guidelineNumber) {
-        let gn = normalizeGuidelineNumber(guidelineNumber, "GB50330-2013");
-
-        return _slopeStability[gn] ? _slopeStability[gn](raw) : _slopeStability.gb503302013(raw);
+        },
     };
 
     let _getActivePressureOnRetainingWall = function (raw, guidelineNumber) {
         let gn = normalizeGuidelineNumber(guidelineNumber, "GB50330-2013");
 
-        return _retainingWall[gn].getActivePressure ?
-            _retainingWall[gn].getActivePressure(raw)
-            :
-            _retainingWall.gb503302013.getActivePressure(raw);
+        return _retainingWall[gn].getActivePressure
+            ? _retainingWall[gn].getActivePressure(raw)
+            : _retainingWall.gb503302013.getActivePressure(raw);
     };
 
-    let _getActivePressureOfFiniteSoilOnRetainingWall = function (raw, guidelineNumber) {
+    let _getActivePressureOfFiniteSoilOnRetainingWall = function (
+        raw,
+        guidelineNumber
+    ) {
         let gn = normalizeGuidelineNumber(guidelineNumber, "GB50330-2013");
 
-        return _retainingWall[gn].getActivePressureOfFiniteSoil ?
-            _retainingWall[gn].getActivePressureOfFiniteSoil(raw)
-            :
-            _retainingWall.gb503302013.getActivePressureOfFiniteSoil(raw);
+        return _retainingWall[gn].getActivePressureOfFiniteSoil
+            ? _retainingWall[gn].getActivePressureOfFiniteSoil(raw)
+            : _retainingWall.gb503302013.getActivePressureOfFiniteSoil(raw);
     };
 
     return {
         basises: ["GB50007-2011", "GB50330-2013"],
-        getSlopingForce: _getSlopingForce,
+        makeSoilMass: _slope.makeSoilMass,
+        makeSlipSurface: _slope.makeSlipSurface,
+        makeSlidingBlock: _slope.makeSlidingBlock,
         gb500072011: {
-            getSlopingForce: _getSlopingForce,
+            formula643: _gb500072011Formula643,
         },
-        getStability: _getStability,
         retainingWall: {
             getActivePressure: _getActivePressureOnRetainingWall,
-            getActivePressureOfFiniteSoil: _getActivePressureOfFiniteSoilOnRetainingWall,
+            getActivePressureOfFiniteSoil:
+                _getActivePressureOfFiniteSoilOnRetainingWall,
         },
         gb503302013: {
-            getStability: _getStability,
+            formula6210: _gb503302013Formula6210,
+            formulaA02: _gb503302013FormulaA02,
             retainingWall: {
                 getActivePressure: _getActivePressureOnRetainingWall,
-                getActivePressureOfFiniteSoil: _getActivePressureOfFiniteSoilOnRetainingWall,
+                getActivePressureOfFiniteSoil:
+                    _getActivePressureOfFiniteSoilOnRetainingWall,
             },
         },
     };

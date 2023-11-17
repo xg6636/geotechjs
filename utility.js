@@ -1,7 +1,7 @@
 // utilities
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/02 10:08:21
-// last modified at 2023-11-16 11:43:48
+// last modified at 2023-11-17 20:00:49
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -34,8 +34,9 @@ function degreeToRadian(x) {
 
 function normalizeGuidelineNumber(x, defaultNumber) {
     let gn = x ?? defaultNumber;
-    gn = gn.toLowerCase();
+    gn = gn.toString().toLowerCase();
     gn = gn.replace("-", "");
-    gn = gn.replace("/", "");
+    gn = gn.replace("/", "");  
+    
     return gn;
 }
