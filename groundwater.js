@@ -1,7 +1,7 @@
 // groundwater functions
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 23:50:09
-// last modified at 2023-11-27 20:26:14
+// last modified at 2023-11-28 09:54:57
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -11,9 +11,7 @@ const groundwater = (function () {
   const _jgj1202012 = {
     formulaC01: function (a) {
       // param a: sample {d: 3, gamma: 18, hw: 5, gammaw: 9.8}
-      return (
-        (Number(a.d) * Number(a.gamma)) / Number(a.hw) / Number(a.gammaw)
-      );
+      return (Number(a.d) * Number(a.gamma)) / Number(a.hw) / Number(a.gammaw);
     },
     formulaC02: function (a) {
       // param a: sample {ld: 3, d1: 2, gamma1: 10, deltah: 5, gammaw: 9.8}
@@ -21,6 +19,25 @@ const groundwater = (function () {
       kf *= Number(a.gamma1);
       kf = kf / Number(a.deltah) / Number(a.gammaw);
       return kf;
+    },
+    formulaE05: function (pitArea, objectAquifer, level0, level1) {
+      let l0 = Number(level0);
+      let l1 = Number(level1);
+      let be = objectAquifer.bottomElevation;
+      let o = { cite: "JGJ120-2012", };
+      o.A = Number(pitArea);
+      o.k = objectAquifer.k;
+      o.H0 = l0 - be
+      o.h = l1 - be;
+      o.M = objectAquifer.topElevation - be;
+      o.r0 = Math.sqrt(o.A / Math.PI);
+      o.Q = Math.PI * o.k;
+      o.Q *= (2 * o.H0 - o.M) * o.M - o.h ** 2;
+      o.Q /= Math.log(1 + objectAquifer.influenceRadius / o.r0);
+      o.value = o.Q;
+      o.displayValue = `Q=${o.value.toFixed(3)}m3/d，
+                    r0=${o.r0.toFixed(3)}m`;
+      return o;
     },
   };
 
@@ -50,11 +67,12 @@ const groundwater = (function () {
   };
 
   const _obj = {
-    aquifer: function (topElev, bottomElev, k) {
+    aquifer: function (topElev, bottomElev, k, influRadius) {
       return {
         topElevation: Number(topElev),
         bottomElevation: Number(bottomElev),
         k: Number(k),
+        influenceRadius: influRadius ? Number(influRadius) : 0,
       };
     },
   };
@@ -74,7 +92,7 @@ const groundwater = (function () {
       o.Q = 2 * Math.PI * o.K0 * o.S * o.r0;
       o.value = o.Q;
       o.displayValue = `Q=${o.value.toFixed(3)}m3/d，
-                      K0=${o.K0.toFixed(3)}m/d，r0=${o.r0.toFixed(3)}m`
+                      K0=${o.K0.toFixed(3)}m/d，r0=${o.r0.toFixed(3)}m`;
       return o;
     },
   };
@@ -92,6 +110,7 @@ const groundwater = (function () {
     },
     bigWellMethod: {
       db42t8302012Formula13: _db42t8302012.formula13,
+      jgj1202012FormulaE05: _jgj1202012.formulaE05,
     },
   };
 })();
