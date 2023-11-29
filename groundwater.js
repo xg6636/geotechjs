@@ -1,7 +1,7 @@
 // groundwater functions
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 23:50:09
-// last modified at 2023-11-28 09:54:57
+// last modified at 2023-11-29 13:16:36
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -20,6 +20,23 @@ const groundwater = (function () {
       kf = kf / Number(a.deltah) / Number(a.gammaw);
       return kf;
     },
+    formulaE04: function (pitArea, objectAquifer, level0, level1, filterLength) {
+      let o = { cite: "JGJ120-2012", };
+      o.A = Number(pitArea);
+      o.sd = Number(level0) - Number(level1);
+      o.l = Number(filterLength);
+      o.k = objectAquifer.k;
+      o.M = objectAquifer.topElevation - objectAquifer.bottomElevation;
+      o.R = objectAquifer.influenceRadius;
+      o.r0 = Math.sqrt(o.A / Math.PI);
+      o.Q = 2 * Math.PI * o.k * o.M * o.sd;
+      o.Q /= Math.log(1 + o.R / o.r0) + (o.M - o.l) / o.l * Math.log(1 + 0.2 * o.M / o.r0);
+      o.value = o.Q;
+      o.displayValue = `Q=${o.value.toFixed(3)}m3/d，
+                    r0=${o.r0.toFixed(3)}m`;
+      return o;
+    },
+
     formulaE05: function (pitArea, objectAquifer, level0, level1) {
       let l0 = Number(level0);
       let l1 = Number(level1);
@@ -110,6 +127,7 @@ const groundwater = (function () {
     },
     bigWellMethod: {
       db42t8302012Formula13: _db42t8302012.formula13,
+      jgj1202012FormulaE04: _jgj1202012.formulaE04,
       jgj1202012FormulaE05: _jgj1202012.formulaE05,
     },
   };
