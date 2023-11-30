@@ -1,7 +1,7 @@
 // groundwater functions
 // coded by Jack Hsu <jackhsu2010@gmail.com>
 // created at 2022/08/01 23:50:09
-// last modified at 2023-11-29 13:16:36
+// last modified at 2023-11-30 13:37:01
 //
 // copyright (c) 2022 - 2023 Jack Hsu
 
@@ -13,6 +13,7 @@ const groundwater = (function () {
       // param a: sample {d: 3, gamma: 18, hw: 5, gammaw: 9.8}
       return (Number(a.d) * Number(a.gamma)) / Number(a.hw) / Number(a.gammaw);
     },
+    
     formulaC02: function (a) {
       // param a: sample {ld: 3, d1: 2, gamma1: 10, deltah: 5, gammaw: 9.8}
       let kf = 2 * Number(a.ld) + 0.8 * Number(a.d1);
@@ -20,6 +21,24 @@ const groundwater = (function () {
       kf = kf / Number(a.deltah) / Number(a.gammaw);
       return kf;
     },
+
+    formulaE03: function (pitArea, objectAquifer, level0, level1, filterLength) {
+      let o = { cite: "JGJ120-2012", };
+      o.A = Number(pitArea);
+      o.sd = Number(level0) - Number(level1);
+      o.l = Number(filterLength);
+      o.k = objectAquifer.k;
+      o.M = objectAquifer.topElevation - objectAquifer.bottomElevation;
+      o.R = objectAquifer.influenceRadius;
+      o.r0 = Math.sqrt(o.A / Math.PI);
+      o.Q = 2 * Math.PI * o.k * o.M * o.sd;
+      o.Q /= Math.log(1 + o.R / o.r0);
+      o.value = o.Q;
+      o.displayValue = `Q=${o.value.toFixed(3)}m3/d，
+                    r0=${o.r0.toFixed(3)}m`;
+      return o;
+    },
+
     formulaE04: function (pitArea, objectAquifer, level0, level1, filterLength) {
       let o = { cite: "JGJ120-2012", };
       o.A = Number(pitArea);
@@ -127,6 +146,7 @@ const groundwater = (function () {
     },
     bigWellMethod: {
       db42t8302012Formula13: _db42t8302012.formula13,
+      jgj1202012FormulaE03: _jgj1202012.formulaE03,
       jgj1202012FormulaE04: _jgj1202012.formulaE04,
       jgj1202012FormulaE05: _jgj1202012.formulaE05,
     },
